@@ -2,7 +2,7 @@ import express from 'express';
 import { config } from 'dotenv';
 config();
 
-import { getProducts } from './src/db/getProducts';
+import { getProducts } from './src/db/queries/getProducts';
 import { productsRouter } from './src/routers/productsRouter';
 
 const app = express();
