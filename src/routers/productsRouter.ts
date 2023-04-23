@@ -7,6 +7,7 @@ import { getProductDescriptionById } from '../db/queries/products/getProductDesc
 
 import { IProductDescription } from '../entities/products/productDescription';
 import { IProductStock } from '../entities/products/productStock';
+import { removeProduct } from '../db/queries/products/removeProduct';
 
 export const productsRouter = Router();
 
@@ -46,7 +47,14 @@ productsRouter.get('/products/tags/:tags', async (req, res) => {
   res.send(result);
 });
 
+productsRouter.delete('/products/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  
+  if (!isNaN(id)) {
+    await removeProduct(id);
 
-productsRouter.delete('/products', (req, res) => {
-  res.send('Hello World!');
+    res.send('Product with id ' + id + ' was removed');
+  } else {
+    res.status(400).send('Invalid ID');
+  }
 })
