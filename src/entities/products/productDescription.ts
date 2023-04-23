@@ -1,10 +1,12 @@
+import { IProduct } from "./product";
+
 export interface IProductDescription {
-  id: number;
-  product_id: number;
+  id?: number;
   name: string;
   price: number;
   description: string;
-  photo_url: string;
   tags: string[];
-  updated_at: Date;
+  updated_at?: Date;
+  product_id?: IProduct['id'];
+  photo_url?: string;
 }

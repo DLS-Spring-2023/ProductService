@@ -1,5 +1,8 @@
+import { IProduct } from "./product";
+
 export interface IProductStock {
-  id: number;
+  id?: number;
+  product_id?: IProduct['id'];
   quantity: number;
-  created_at: Date;
+  updated_at?: Date;
 }
