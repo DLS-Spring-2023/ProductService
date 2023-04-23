@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from 'dayjs';
 
-import { IProductDescription } from "../../../entities/products/productDescription";
-import { IProductStock } from "../../../entities/products/productStock";
+import { IProductDescription } from "../../../../entities/products/productDescription";
+import { IProductStock } from "../../../../entities/products/productStock";
 
 export const preparePostProductValues = (product: IProductDescription, stock: IProductStock) => {
   const timeStamp = dayjs().format('YYYY-MM-DD HH:mm:ss');

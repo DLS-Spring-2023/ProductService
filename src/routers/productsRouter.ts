@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import { postProduct } from '../db/queries/postProduct';
-import { getAllProducts } from '../db/queries/getAllProducts';
-import { getProductDescriptionById } from '../db/queries/getProductDescriptionById';
-import { findProductsByTags } from '../db/queries/findProductsByTags';
+import { findProductsByTags } from '../db/queries/products/findProductsByTags';
+import { getAllProducts } from '../db/queries/products/getAllProducts';
+import { postProduct } from '../db/queries/products/postProduct';
+import { getProductDescriptionById } from '../db/queries/products/getProductDescriptionById';
 
 import { IProductDescription } from '../entities/products/productDescription';
 import { IProductStock } from '../entities/products/productStock';

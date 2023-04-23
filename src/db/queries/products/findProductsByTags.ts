@@ -1,6 +1,6 @@
-import { IProductDescription } from "../../entities/products/productDescription";
+import { IProductDescription } from "../../../entities/products/productDescription";
 
-import { query } from "../connection/database";
+import { query } from "../../connection/database";
 
 export const findProductsByTags = (tags: string): Promise<IProductDescription[]> => {
   // TODO: Think about limitation for tags, leaving default as 5 for now
