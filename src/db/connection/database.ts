@@ -33,6 +33,7 @@ export const pool = mysql.createPool({
 
 /**
   *  Establishes a connection to the database and executes the query.
+  *  @template T type of the result of the query.
   *  @param sql - The SQL query to be executed.
   *  @param values - The values to be inserted into the query.
   * 
@@ -41,14 +42,28 @@ export const pool = mysql.createPool({
   *  @throws Will throw an error if the query fails and releases the connection.
  */
 
-export async function query(sql: string, values?: any[]): Promise<mysql.ResultSetHeader | mysql.RowDataPacket[] | mysql.RowDataPacket[][] | mysql.OkPacket | mysql.OkPacket[]> {
+export async function query<T extends 
+  mysql.ResultSetHeader 
+  | mysql.RowDataPacket[] 
+  | mysql.RowDataPacket[][] 
+  | mysql.OkPacket 
+  | mysql.OkPacket[]
+>(
+  sql: string, 
+  values?: any[]
+): Promise<T> {
   const conn = await pool.getConnection();
+  
   try {
-    const [result] = await conn.query(sql, values);
+    const [result] = await conn.query<T>(sql, values);
+
     return result;
+
   } catch (err) {
     console.log(err)
     conn.release();
+    throw err;
+
   } finally {
     conn.release();
   }

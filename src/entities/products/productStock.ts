@@ -1,6 +1,8 @@
+import { RowDataPacket } from "mysql2";
+
 import { IProduct } from "./product";
 
-export interface IProductStock {
+export interface IProductStock extends RowDataPacket {
   id?: number;
   product_id?: IProduct['id'];
   quantity: number;

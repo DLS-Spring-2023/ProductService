@@ -1,17 +1,14 @@
 import express from 'express';
 import { config } from 'dotenv';
+import bodyParser from 'body-parser';
+
 config();
 
-import { getProducts } from './src/db/queries/getProducts';
 import { productsRouter } from './src/routers/productsRouter';
 
 const app = express();
-
-app.get('/', async (req, res) => {
-    const products = await getProducts();
-    console.log(products);
-    res.send(products);
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(productsRouter)
 

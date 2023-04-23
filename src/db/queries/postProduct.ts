@@ -13,6 +13,7 @@ export const postProduct = async (product: IProductDescription, stock: IProductS
 
   const result = await query(postProductSqlStatement, values);
 
+  // TODO: create an interface for this response
   return {...product, ...stock, id: result[0].insertId};
 
   } catch (error) {
