@@ -1,22 +1,25 @@
 import { Router } from 'express';
 
 import { postProduct } from '../db/queries/postProduct';
+import { getAllProducts } from '../db/queries/getAllProducts';
+import { getProductDescriptionById } from '../db/queries/getProductDescriptionById';
+import { findProductsByTags } from '../db/queries/findProductsByTags';
 
 import { IProductDescription } from '../entities/products/productDescription';
 import { IProductStock } from '../entities/products/productStock';
-import { getAllProducts } from '../db/queries/getAllProducts';
-import { getProductDescriptionById } from '../db/queries/getProductDescriptionById';
-import { findProductsByTag } from '../db/queries/findProductsByTag';
 
 export const productsRouter = Router();
 
 productsRouter.post('/products', async (req, res) => {
-  const product: IProductDescription = req.body.product;
+  const product: IProductDescription = req.body.product
   const stock: IProductStock = req.body.stock;
 
-  const result = await postProduct(product, stock);
-
-  res.send(result);
+  if (product && stock) {
+    const result = await postProduct(product, stock);
+    res.send(result);
+  } else {
+    res.status(400).send('Bad request');
+  }
 });
 
 productsRouter.get('/products', async (req, res) => {
@@ -26,13 +29,19 @@ productsRouter.get('/products', async (req, res) => {
 });
 
 productsRouter.get('/products/:id', async (req, res) => {
-  const result = await getProductDescriptionById(Number(req.params.id));
+  const id = Number(req.params.id);
+  
+  if (!isNaN(id)) {
+    const result = await getProductDescriptionById(id);
 
-  res.send(result);
+    res.send(result);
+  } else {
+    res.status(400).send('Invalid ID');
+  }
 });
 
-productsRouter.get('/products/:tags', async (req, res) => {
-  const result = await findProductsByTag(req.params.tags);
+productsRouter.get('/products/tags/:tags', async (req, res) => {
+  const result = await findProductsByTags(req.params.tags);
   
   res.send(result);
 });
