@@ -23,6 +23,7 @@
     "@types/express": "^4.17.17",
     "body-parser": "^1.20.2",
     "dayjs": "^1.11.7",
+    "dls-messagelibrary": "^1.0.19",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mysql2": "^3.2.0",
