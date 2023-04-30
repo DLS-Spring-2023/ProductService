@@ -51,8 +51,11 @@ productsRouter.delete('/products/:id', async (req, res) => {
   const id = Number(req.params.id);
   
   if (!isNaN(id)) {
-    await removeProduct(id);
-
+    const removedProduct = await removeProduct(id);
+    if (removedProduct.length === 0) {
+      res.status(400).send('Product with id ' + id + ' was already removed');
+      return;
+    }
     res.send('Product with id ' + id + ' was removed');
   } else {
     res.status(400).send('Invalid ID');
