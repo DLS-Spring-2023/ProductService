@@ -12,7 +12,7 @@ import { removeProduct } from '../db/queries/products/removeProduct';
 export const productsRouter = Router();
 
 productsRouter.post('/products', async (req, res) => {
-  const product: IProductDescription = req.body.product
+  const product: IProductDescription = req.body.product;
   const stock: IProductStock = req.body.stock;
 
   if (product && stock) {
@@ -31,7 +31,7 @@ productsRouter.get('/products', async (req, res) => {
 
 productsRouter.get('/products/:id', async (req, res) => {
   const id = Number(req.params.id);
-  
+
   if (!isNaN(id)) {
     const result = await getProductDescriptionById(id);
 
@@ -43,21 +43,21 @@ productsRouter.get('/products/:id', async (req, res) => {
 
 productsRouter.get('/products/tags/:tags', async (req, res) => {
   const result = await findProductsByTags(req.params.tags);
-  
+
   res.send(result);
 });
 
 productsRouter.delete('/products/:id', async (req, res) => {
   const id = Number(req.params.id);
-  
+
   if (!isNaN(id)) {
     const removedProduct = await removeProduct(id);
     if (removedProduct.length === 0) {
-      res.status(400).send('Product with id ' + id + ' was already removed');
+      res.status(400).send('Product with id ' + id + ' is already removed');
       return;
     }
     res.send('Product with id ' + id + ' was removed');
   } else {
     res.status(400).send('Invalid ID');
   }
-})
+});
