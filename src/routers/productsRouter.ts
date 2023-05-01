@@ -12,11 +12,12 @@ import { removeProduct } from '../db/queries/products/removeProduct';
 export const productsRouter = Router();
 
 productsRouter.post('/products', async (req, res) => {
-  const product: IProductDescription = req.body.product
-  const stock: IProductStock = req.body.stock;
-
-  if (product && stock) {
-    const result = await postProduct(product, stock);
+  const productDescription: IProductDescription = req.body.product
+  const productStock: IProductStock = req.body.stock;
+  
+  // TODO: make sure price is a number, else it will crash lmao
+  if (productDescription && productStock && productDescription.price) {
+    const result = await postProduct(productDescription, productStock);
     res.send(result);
   } else {
     res.status(400).send('Bad request');
