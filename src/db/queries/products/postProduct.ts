@@ -1,5 +1,5 @@
 import { query } from "../../connection/database";
-// import { pushMessageToServiceBus, ProductsIndexingMessageBody } from "dls-messagelibrary";
+import { pushMessageToServiceBus, ProductsIndexingMessageBody } from "dls-messagelibrary";
 
 import { IPostProductResponse } from "../../../entities/products/postProductResponse";
 import { IProductDescription } from "../../../entities/products/productDescription";
