@@ -1,5 +1,5 @@
 import { query } from "../../connection/database";
-// import { pushMessageToServiceBus, ProductsIndexingMessageBody } from "dls-messagelibrary";
+import { pushMessageToServiceBus, ProductsIndexingMessageBody } from "dls-messagelibrary";
 
 import { IPostProductResponse } from "../../../entities/products/postProductResponse";
 import { IProductDescription } from "../../../entities/products/productDescription";
@@ -7,7 +7,8 @@ import { IProductStock } from "../../../entities/products/productStock";
 
 import { preparePostProductValues, postProductSqlStatement } from "./utils/preparePostProductStatement";
 
-export const postProduct = async (productDescription: IProductDescription, productStock: IProductStock) => {
+export const postProduct = async (productDescription: IProductDescription, productStock: IProductStock): Promise<IPostProductResponse> => {
+
   try {
   const values = preparePostProductValues(productDescription, productStock);
   
