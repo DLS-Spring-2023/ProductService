@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "type:": "module",
   "scripts": {
-		"build": "tsc",
-		"start": "node dist/index.js"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "dls-messagelibrary": "^1.0.19",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.2.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1"
