@@ -1,11 +1,11 @@
 import { query } from "../../connection/database";
-import { pushMessageToServiceBus, ProductsIndexingMessageBody } from "dls-messagelibrary";
 
 import { IPostProductResponse } from "../../../entities/products/postProductResponse";
 import { IProductDescription } from "../../../entities/products/productDescription";
 import { IProductStock } from "../../../entities/products/productStock";
 
 import { preparePostProductValues, postProductSqlStatement } from "./utils/preparePostProductStatement";
+import { pushProductToQue } from "./utils/pushProductToQue";
 
 export const postProduct = async (productDescription: IProductDescription, productStock: IProductStock): Promise<IPostProductResponse> => {
 
@@ -19,6 +19,8 @@ export const postProduct = async (productDescription: IProductDescription, produ
     productStock,
     productId: result[0].insertId
   };
+
+  await pushProductToQue(postProductResponse.productId, productDescription, productStock);
 
   return postProductResponse;
 
