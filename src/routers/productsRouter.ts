@@ -3,11 +3,12 @@ import { Router } from 'express';
 import { findProductsByTags } from '../db/queries/products/findProductsByTags';
 import { getAllProducts } from '../db/queries/products/getAllProducts';
 import { postProduct } from '../db/queries/products/postProduct';
-import { getProductDescriptionById } from '../db/queries/products/getProductDescriptionById';
+import { removeProduct } from '../db/queries/products/removeProduct';
+import { updateLatestProductDescription } from '../db/queries/products/updateProductDescription';
+import { getLatestProductDescriptionById } from '../db/queries/products/getProductDescriptionById';
 
 import { IProductDescription } from '../entities/products/productDescription';
 import { IProductStock } from '../entities/products/productStock';
-import { removeProduct } from '../db/queries/products/removeProduct';
 
 export const productsRouter = Router();
 
@@ -15,12 +16,34 @@ productsRouter.post('/products', async (req, res) => {
   const productDescription: IProductDescription = req.body.product;
   const productStock: IProductStock = req.body.stock;
 
-  // TODO: make sure price is a number, else it will crash lmao
-  if (productDescription && productStock && productDescription.price) {
-    const result = await postProduct(productDescription, productStock);
+  if (!isNaN(productDescription.price)) {
+    if (productDescription && productStock && productDescription.price) {
+      const result = await postProduct(productDescription, productStock);
+      res.send(result);
+    } else {
+      res.status(400).send('Bad request');
+    }
+  } else {
+    res.status(400).send('Invalid price');
+  }
+
+});
+
+productsRouter.post('/products/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  const testUpdatedProductDescription: IProductDescription = {
+    name: 'test',
+    price: 3,
+    description: 'test',
+    tags: []
+  } as IProductDescription
+
+  if (!isNaN(id)) {
+    const result = updateLatestProductDescription(id, testUpdatedProductDescription)
+    
     res.send(result);
   } else {
-    res.status(400).send('Bad request');
+    res.status(400).send('Invalid ID');
   }
 });
 
@@ -34,8 +57,8 @@ productsRouter.get('/products/:id', async (req, res) => {
   const id = Number(req.params.id);
 
   if (!isNaN(id)) {
-    const result = await getProductDescriptionById(id);
-
+    const result = await getLatestProductDescriptionById(id);
+    
     res.send(result);
   } else {
     res.status(400).send('Invalid ID');

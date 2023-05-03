@@ -1,9 +1,13 @@
-import { query } from "../../connection/database";
+import { query } from '../../connection/database';
 
-import { IProduct } from "../../../entities/products/product";
+import { IProduct } from '../../../entities/products/product';
 
-export async function getAllProducts() {
-  const result = await query<IProduct[]>('SELECT * FROM products');
-  
-  return result;
-}
+export const getAllProducts = async (): Promise<IProduct[]> => {
+  try {
+    const result = await query<IProduct[]>('SELECT * FROM products');
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
