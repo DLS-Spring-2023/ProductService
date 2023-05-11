@@ -13,8 +13,8 @@ import { IProductStock } from '../entities/products/productStock';
 export const productsRouter = Router();
 
 productsRouter.post('/products', async (req, res) => {
-  const productDescription: IProductDescription = req.body.product;
-  const productStock: IProductStock = req.body.stock;
+  const productDescription: IProductDescription = req.body.productDescription;
+  const productStock: IProductStock = req.body.productStock;
 
   if (!isNaN(productDescription.price)) {
     if (productDescription && productStock && productDescription.price) {
@@ -31,15 +31,10 @@ productsRouter.post('/products', async (req, res) => {
 
 productsRouter.post('/products/:id', async (req, res) => {
   const id = Number(req.params.id);
-  const testUpdatedProductDescription: IProductDescription = {
-    name: 'test',
-    price: 3,
-    description: 'test',
-    tags: []
-  } as IProductDescription
+  const updatedProductDescription: IProductDescription = req.body.productDescription;
 
   if (!isNaN(id)) {
-    const result = updateLatestProductDescription(id, testUpdatedProductDescription)
+    const result = updateLatestProductDescription(id, updatedProductDescription)
     
     res.send(result);
   } else {
@@ -72,7 +67,7 @@ productsRouter.get('/products/tags/:tags', async (req, res) => {
 });
 
 productsRouter.delete('/products/:id', async (req, res) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id); 
 
   if (!isNaN(id)) {
     const removedProduct = await removeProduct(id);

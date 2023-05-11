@@ -1,13 +1,14 @@
 import express from 'express';
 import { config } from 'dotenv';
 import bodyParser from 'body-parser';
-
+  
 config();
 
 import { productsRouter } from './src/routers/productsRouter';
 import { authenticateJWT } from './src/auth/verify-token-middleware';
 
 const app = express();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

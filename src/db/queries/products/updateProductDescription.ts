@@ -6,7 +6,7 @@ import { IProductDescription } from '../../../entities/products/productDescripti
 export const updateLatestProductDescription = async (
   id: number,
   productDescription: IProductDescription
-) => {
+): Promise<IProductDescription> => {
   const timeStamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
   try {
@@ -30,6 +30,6 @@ export const updateLatestProductDescription = async (
       timeStamp,
     ])
 
-    console.log(updatedProductDescription)
+    return updatedProductDescription;
   } catch (error) {}
 };
