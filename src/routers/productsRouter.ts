@@ -34,8 +34,7 @@ productsRouter.post('/products/:id', async (req, res) => {
   const updatedProductDescription: IProductDescription = req.body.productDescription;
 
   if (!isNaN(id)) {
-    const result = updateLatestProductDescription(id, updatedProductDescription)
-    
+    const result = await updateLatestProductDescription(id, updatedProductDescription)
     res.send(result);
   } else {
     res.status(400).send('Invalid ID');

@@ -29,7 +29,7 @@ export const updateLatestProductDescription = async (
       updatedProductDescription.price,
       timeStamp,
     ])
-
+    
     return updatedProductDescription;
   } catch (error) {}
 };
