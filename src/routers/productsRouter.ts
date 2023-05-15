@@ -48,18 +48,19 @@ productsRouter.post('/products/:id', async (req, res) => {
 
 productsRouter.post('/products/deduct/update-stock', async (req, res) => {
   const productDeductRequest: IProductDeductRequest = req.body;
-  const testDeductRequest: IProductDeductRequest = {
-    requestId: '',
-    deductProducts: [
-      {
-        productId: 65,
-        deductAmount: 30,
-      },
-    ],
-  };
+  // const testDeductRequest: IProductDeductRequest = {
+  //   requestId: '',
+  //   deductProducts: [
+  //     {
+  //       productId: 65,
+  //       deductAmount: 30,
+  //     },
+  //   ],
+  // };
 
-  if (testDeductRequest) {
-    const result = deductProductStock(testDeductRequest);
+  if (productDeductRequest) {
+    const result = deductProductStock(productDeductRequest);
+    res.send({ response: result})
   } else {
     res.status(400).send('Bad request');
   }
