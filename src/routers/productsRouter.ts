@@ -59,10 +59,13 @@ productsRouter.post('/products/deduct/update-stock', async (req, res) => {
   // };
 
   if (productDeductRequest) {
-    const result = deductProductStock(productDeductRequest);
-    res.send({ response: result})
+    deductProductStock(productDeductRequest).then((result) => {
+      res.send({ response: result, status: 'OK' });
+    }).catch((error) => {
+      res.status(400).send({ response: error.message, status: 'FAILED' });
+    });
   } else {
-    res.status(400).send('Bad request');
+    res.status(400).send({ response: '', status: 'OK' });
   }
 });
 

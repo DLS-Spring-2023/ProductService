@@ -1,6 +1,6 @@
 import { IProductDeductRequest } from '../../../entities/products/productDeductRequest';
 import { pool } from '../../connection/database';
-
+//TODO: predefine errors, make code more readable and compact, maybe split things up
 export const deductProductStock = async (
   productDeductRequest: IProductDeductRequest
 ) => {
@@ -22,7 +22,7 @@ export const deductProductStock = async (
 
       if (getLatestStock[0]) {
         if (getLatestStock[0].new_stock < deductAmount) {
-          throw new Error(`Product ${productId} stock is not enough.`);
+          throw new Error(`Product stock for product id ${productId} is not enough.`);
         }
 
         const newQuantity = getLatestStock[0].new_stock - deductAmount;
@@ -41,7 +41,7 @@ export const deductProductStock = async (
         );
 
         if (productStock[0].quantity < deductAmount) {
-          throw new Error(`Product ${productId} stock is not enough.`);
+          throw new Error(`Product stock for product id ${productId} is not enough.`);
         }
 
         const newQuantity = Number(productStock[0].quantity) - deductAmount;
