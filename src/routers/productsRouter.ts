@@ -9,6 +9,8 @@ import { getLatestProductDescriptionById } from '../db/queries/products/getProdu
 
 import { IProductDescription } from '../entities/products/productDescription';
 import { IProductStock } from '../entities/products/productStock';
+import { IProductDeductRequest } from '../entities/products/productDeductRequest';
+import { deductProductStock } from '../db/queries/products/deductProductStock';
 
 export const productsRouter = Router();
 
@@ -26,18 +28,40 @@ productsRouter.post('/products', async (req, res) => {
   } else {
     res.status(400).send('Invalid price');
   }
-
 });
 
 productsRouter.post('/products/:id', async (req, res) => {
   const id = Number(req.params.id);
-  const updatedProductDescription: IProductDescription = req.body.productDescription;
+  const updatedProductDescription: IProductDescription =
+    req.body.productDescription;
 
   if (!isNaN(id)) {
-    const result = await updateLatestProductDescription(id, updatedProductDescription)
+    const result = await updateLatestProductDescription(
+      id,
+      updatedProductDescription
+    );
     res.send(result);
   } else {
     res.status(400).send('Invalid ID');
+  }
+});
+
+productsRouter.post('/products/deduct/update-stock', async (req, res) => {
+  const productDeductRequest: IProductDeductRequest = req.body;
+  const testDeductRequest: IProductDeductRequest = {
+    requestId: '',
+    deductProducts: [
+      {
+        productId: 65,
+        deductAmount: 30,
+      },
+    ],
+  };
+
+  if (testDeductRequest) {
+    const result = deductProductStock(testDeductRequest);
+  } else {
+    res.status(400).send('Bad request');
   }
 });
 
@@ -52,7 +76,7 @@ productsRouter.get('/products/:id', async (req, res) => {
 
   if (!isNaN(id)) {
     const result = await getLatestProductDescriptionById(id);
-    
+
     res.send(result);
   } else {
     res.status(400).send('Invalid ID');
@@ -66,7 +90,7 @@ productsRouter.get('/products/tags/:tags', async (req, res) => {
 });
 
 productsRouter.delete('/products/:id', async (req, res) => {
-  const id = Number(req.params.id); 
+  const id = Number(req.params.id);
 
   if (!isNaN(id)) {
     const removedProduct = await removeProduct(id);
