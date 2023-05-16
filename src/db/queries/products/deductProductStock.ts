@@ -1,5 +1,6 @@
 import { IProductDeductRequest } from '../../../entities/products/productDeductRequest';
 import { pool } from '../../connection/database';
+
 //TODO: predefine errors, make code more readable and compact, maybe split things up
 export const deductProductStock = async (
   productDeductRequest: IProductDeductRequest
@@ -19,19 +20,22 @@ export const deductProductStock = async (
         'SELECT * FROM product_stock_history WHERE product_id = ? ORDER BY updated_at DESC LIMIT 1',
         [productId]
       );
-
+      
+      //: If the product has a history, get the latest stock
       if (getLatestStock[0]) {
         if (getLatestStock[0].new_stock < deductAmount) {
           throw new Error(`Product stock for product id ${productId} is not enough.`);
         }
 
+        //: Deduct the amount from the latest stock
         const newQuantity = getLatestStock[0].new_stock - deductAmount;
 
+        //: Insert the new stock into history
         await conn.query(
           'INSERT INTO product_stock_history (product_id, new_stock, request_id, updated_at) VALUES (?, ?, ?, ?)',
           [productId, newQuantity, requestId, new Date()]
         );
-        console.log(`Product ${productId} stock deducted by ${deductAmount}`);
+        console.log(`Product with productId ${productId} stock deducted by ${deductAmount}`);
       }
       //: If no history exists for the product, get the initial stock
       else {
@@ -50,10 +54,11 @@ export const deductProductStock = async (
           'INSERT INTO product_stock_history (product_id, new_stock, request_id) VALUES (?, ?, ?)',
           [productId, newQuantity, requestId]
         );
-        console.log(`Product ${productId} stock deducted by ${deductAmount}`);
+        console.log(`Product with productId ${productId} stock deducted by ${deductAmount}`);
       }
     }
 
+    //TODO: Send logging to bus / use queue to update stock
     await conn.commit();
     console.log('Stock deduction completed successfully.');
     return `Order was completed for request-id ${requestId}.`

@@ -6,13 +6,16 @@ config();
 
 import { productsRouter } from './src/routers/productsRouter';
 import { authenticateJWT } from './src/auth/verify-token-middleware';
+import { orderDeductRouter } from './src/routers/orderDeductRouter';
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// app.use(authenticateJWT)
+app.use(orderDeductRouter)
+
+app.use(authenticateJWT)
 
 app.use(productsRouter)
 

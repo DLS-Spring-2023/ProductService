@@ -9,8 +9,6 @@ import { getLatestProductDescriptionById } from '../db/queries/products/getProdu
 
 import { IProductDescription } from '../entities/products/productDescription';
 import { IProductStock } from '../entities/products/productStock';
-import { IProductDeductRequest } from '../entities/products/productDeductRequest';
-import { deductProductStock } from '../db/queries/products/deductProductStock';
 
 export const productsRouter = Router();
 
@@ -46,28 +44,6 @@ productsRouter.post('/products/:id', async (req, res) => {
   }
 });
 
-productsRouter.post('/products/deduct/update-stock', async (req, res) => {
-  const productDeductRequest: IProductDeductRequest = req.body;
-  // const testDeductRequest: IProductDeductRequest = {
-  //   requestId: '',
-  //   deductProducts: [
-  //     {
-  //       productId: 65,
-  //       deductAmount: 30,
-  //     },
-  //   ],
-  // };
-
-  if (productDeductRequest) {
-    deductProductStock(productDeductRequest).then((result) => {
-      res.send({ response: result, status: 'OK' });
-    }).catch((error) => {
-      res.status(400).send({ response: error.message, status: 'FAILED' });
-    });
-  } else {
-    res.status(400).send({ response: '', status: 'OK' });
-  }
-});
 
 productsRouter.get('/products', async (req, res) => {
   const result = await getAllProducts();
