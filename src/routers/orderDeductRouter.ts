@@ -6,7 +6,7 @@ export const orderDeductRouter = Router();
 
 orderDeductRouter.post('/products/deduct/update-stock', async (req, res) => {
   const productDeductRequest: IProductDeductRequest = req.body;
-  console.log('productDeductRequest', productDeductRequest)
+  
   if (productDeductRequest) {
     deductProductStock(productDeductRequest).then((result) => {
       res.send({ response: result, status: 'OK' });
