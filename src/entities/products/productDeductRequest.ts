@@ -1,6 +1,6 @@
-import { IProductDeduct } from "./productDeduct";
+import { IItemDeduct } from "./itemDeduct";
 
 export interface IProductDeductRequest {
   requestId: string;
-  deductProducts: IProductDeduct[]
+  deductItems: IItemDeduct[]
 }

@@ -8,11 +8,10 @@ export const deductProductStock = async (
   const conn = await pool.getConnection();
   try {
     await conn.beginTransaction();
-
     const requestId = productDeductRequest.requestId;
 
     //: For every product in the request
-    for (const productDeduct of productDeductRequest.deductProducts) {
+    for (const productDeduct of productDeductRequest.deductItems) {
       const { productId, deductAmount } = productDeduct;
 
       //: Get the latest stock from history
