@@ -16,16 +16,12 @@ productsRouter.post('/products', async (req, res) => {
   const productDescription: IProductDescription = req.body.productDescription;
   const productStock: IProductStock = req.body.productStock;
 
-  if (!isNaN(productDescription.price)) {
     if (productDescription && productStock && productDescription.price) {
       const result = await postProduct(productDescription, productStock);
       res.send(result);
     } else {
-      res.status(400).send('Bad request');
+      res.status(400).send('Bad request || Chckec that price is a number and not a string');
     }
-  } else {
-    res.status(400).send('Invalid price');
-  }
 });
 
 productsRouter.post('/products/:id', async (req, res) => {
