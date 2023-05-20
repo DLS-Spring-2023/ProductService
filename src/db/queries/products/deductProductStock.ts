@@ -1,5 +1,6 @@
 import { IProductDeductRequest } from '../../../entities/products/productDeductRequest';
 import { pool } from '../../connection/database';
+import { pushUpdatedProductStockToQue } from './utils/pushUpdatedProductStockToQue';
 
 //TODO: predefine errors, make code more readable and compact, maybe split things up
 export const deductProductStock = async (
@@ -9,6 +10,7 @@ export const deductProductStock = async (
   try {
     await conn.beginTransaction();
     const requestId = productDeductRequest.requestId;
+    let newStock: number;
 
     //: For every product in the request
     for (const productDeduct of productDeductRequest.deductItems) {
@@ -28,6 +30,7 @@ export const deductProductStock = async (
 
         //: Deduct the amount from the latest stock
         const newQuantity = getLatestStock[0].new_stock - deductAmount;
+        newStock = Number(newQuantity);
 
         //: Insert the new stock into history
         await conn.query(
@@ -36,6 +39,7 @@ export const deductProductStock = async (
         );
         console.log(`Product with productId ${productId} stock deducted by ${deductAmount}`);
       }
+      
       //: If no history exists for the product, get the initial stock
       else {
         const [productStock] = await conn.query(
@@ -48,12 +52,19 @@ export const deductProductStock = async (
         }
 
         const newQuantity = Number(productStock[0].quantity) - deductAmount;
-        console.log(productStock[0].quantity);
+        newStock = Number(newQuantity);
+
         await conn.query(
           'INSERT INTO product_stock_history (product_id, new_stock, request_id) VALUES (?, ?, ?)',
           [productId, newQuantity, requestId]
         );
         console.log(`Product with productId ${productId} stock deducted by ${deductAmount}`);
+      }
+      
+      try {
+        pushUpdatedProductStockToQue(productDeduct.productId.toString(), newStock)
+      } catch (error) {
+        console.log('Failed to send update stock to service bus')
       }
     }
 
