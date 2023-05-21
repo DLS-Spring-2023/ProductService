@@ -5,8 +5,13 @@ export const getAllProducts = async (): Promise<IProduct[]> => {
   try {
     const result = await query<IProduct[]>(`
       SELECT *
-      FROM product_description
-      WHERE product_id NOT IN (SELECT product_id FROM product_removed)
+      FROM product_description pd
+      WHERE pd.updated_at = (
+        SELECT MAX(updated_at)
+        FROM product_description
+        WHERE product_id = pd.product_id
+      )
+      AND pd.product_id NOT IN (SELECT product_id FROM product_removed)
     `);
 
     return result;
