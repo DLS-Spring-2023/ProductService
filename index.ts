@@ -1,14 +1,18 @@
 import express from 'express';
 import { config } from 'dotenv';
 import bodyParser from 'body-parser';
-  
-config();
+import { createHandler } from 'graphql-http/lib/use/express';
 
+import { schema } from './src/graphql/schema'
+
+config();
 import { productsRouter } from './src/routers/productsRouter';
 import { authenticateJWT } from './src/auth/verify-token-middleware';
 import { orderDeductRouter } from './src/routers/orderDeductRouter';
 
 const app = express();
+
+app.use('/graphql', createHandler({schema}))
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
